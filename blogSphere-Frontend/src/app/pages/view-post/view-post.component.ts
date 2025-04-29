@@ -83,7 +83,7 @@ export class ViewPostComponent{
     this.postForm = new FormGroup({
       name: new FormControl('', Validators.required),
       content: new FormControl('', Validators.required),
-      img: new FormControl('', Validators.required)
+      img: new FormControl(null)
     });
 
 

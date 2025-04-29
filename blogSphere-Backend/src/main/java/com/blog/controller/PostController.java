@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.http.MediaType;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -94,7 +95,8 @@ public class PostController {
             @RequestParam("content") String content,
             @RequestParam("img") MultipartFile imageFile ) {
 	try {
-
+		Post existingPost = postService.getPostById(id);
+        String oldImage = existingPost.getImg();
     	Post post=new Post();
     	
     	post.setName(name);
@@ -107,6 +109,11 @@ public class PostController {
 	    Files.createDirectories(path.getParent());
 	    Files.write(path, imageFile.getBytes());
 	    post.setImg(randomFileName);
+	    
+	    if (oldImage != null) {
+            Path oldImagePath = Paths.get(uploadDir + oldImage);
+            Files.deleteIfExists(oldImagePath);
+        }
     	
         Post updatedPost = postService.updatePost(id, post);
         return ResponseEntity.ok(updatedPost);
@@ -184,10 +191,51 @@ public class PostController {
         }
     }
     
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> deletePost(@PathVariable Long id) {
+//    	commentService.deleteCommentsByPostId(id);
+//    	return ResponseEntity.ok().build();
+//        try {
+//            Post post = postService.getPostById(id);
+//            if (post != null) {
+//                String imageName = post.getImg();
+//                if (imageName != null) {
+//                    Path imagePath = Paths.get("uploads/" + imageName);
+//                    Files.deleteIfExists(imagePath);
+//                }
+//                postService.deletePost(id);
+//                return ResponseEntity.noContent().build();
+//            } 
+//        } catch (IOException e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//        postService.deletePostById(id);
+//        
+//    }
+    
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(@PathVariable Long id) {
-    	commentService.deleteCommentsByPostId(id);
-        postService.deletePostById(id);
-        return ResponseEntity.ok().build();
+        try {
+            commentService.deleteCommentsByPostId(id);
+
+            Post post = postService.getPostById(id);
+            if (post != null) {
+                String imageName = post.getImg();
+                if (imageName != null) {
+                    Path imagePath = Paths.get("uploads/" + imageName);
+                    Files.deleteIfExists(imagePath);
+                }
+
+                postService.deletePostById(id);
+                return ResponseEntity.noContent().build();  // 204 No Content
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+
 }
