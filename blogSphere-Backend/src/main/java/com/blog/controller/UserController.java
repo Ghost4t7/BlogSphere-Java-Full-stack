@@ -67,7 +67,7 @@ public class UserController {
             return status;
         }
     }
- // In your UserController
+
     @GetMapping("/session")
     public ResponseEntity<?> getSessionUser(HttpSession session) {
         Object userIdObj = session.getAttribute("userid");

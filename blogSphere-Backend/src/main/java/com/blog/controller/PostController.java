@@ -191,28 +191,6 @@ public class PostController {
         }
     }
     
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<?> deletePost(@PathVariable Long id) {
-//    	commentService.deleteCommentsByPostId(id);
-//    	return ResponseEntity.ok().build();
-//        try {
-//            Post post = postService.getPostById(id);
-//            if (post != null) {
-//                String imageName = post.getImg();
-//                if (imageName != null) {
-//                    Path imagePath = Paths.get("uploads/" + imageName);
-//                    Files.deleteIfExists(imagePath);
-//                }
-//                postService.deletePost(id);
-//                return ResponseEntity.noContent().build();
-//            } 
-//        } catch (IOException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//        }
-//        postService.deletePostById(id);
-//        
-//    }
-    
     
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(@PathVariable Long id) {
@@ -228,7 +206,7 @@ public class PostController {
                 }
 
                 postService.deletePostById(id);
-                return ResponseEntity.noContent().build();  // 204 No Content
+                return ResponseEntity.noContent().build();
             } else {
                 return ResponseEntity.notFound().build();
             }

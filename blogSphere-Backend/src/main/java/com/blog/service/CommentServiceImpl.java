@@ -62,8 +62,6 @@ public class CommentServiceImpl implements CommentService {
 	    commentRepository.deleteByPostId(postId);
 	}
 	
-
-    // 🔥 New Code for Update
     @Override
     public Comment updateComment(Long commentId, String newContent) {
         Comment comment = commentRepository.findById(commentId)
@@ -73,7 +71,6 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.save(comment);
     }
 
-    // 🔥 New Code for Delete
     @Override
     public void deleteCommentById(Long commentId) {
         if (!commentRepository.existsById(commentId)) {

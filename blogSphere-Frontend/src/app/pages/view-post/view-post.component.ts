@@ -47,8 +47,6 @@ export class ViewPostComponent{
   selectedPost: any;
   postOwnerId: any;
 
-  // lakshmi
-
 
   sessionUser: any;
   selectedImageFile: any;
@@ -58,7 +56,7 @@ export class ViewPostComponent{
     private activatedRoute: ActivatedRoute,
     private matSnackBar: MatSnackBar,
     private router: Router,
-  // lakshmi
+
   private fb:FormBuilder,
   private commentService:CommentService,
   private http: HttpClient,
@@ -87,7 +85,7 @@ export class ViewPostComponent{
     });
 
 
-  //lakshmi
+   
   this.commentForm =this.fb.group({
     postedBy:[null,Validators.required],
     content:[null,Validators.required]
@@ -210,7 +208,7 @@ export class ViewPostComponent{
         }
       }
 
-    // lakshmi
+    //  
     publishComment(){
       const content = this.commentForm.get('content')?.value;
 
